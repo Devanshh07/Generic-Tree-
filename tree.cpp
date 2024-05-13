@@ -1,12 +1,13 @@
 #include <iostream>
 #include <bits/stdc++.h>
 using namespace std;
+
 template <typename T>
 class treeNode
 {
 public:
     T data;
-    vector<treeNode<T> *> children;
+    vector<treeNode<T>*> children;
     treeNode(T data)
     {
         this->data = data;
@@ -35,6 +36,7 @@ treeNode<char> *takeinput()
 };
 treeNode<int> *input()
 {
+    //Using Queue->
     int rootdata;
     cout << "Enter root data : ";
     cin >> rootdata;
@@ -176,6 +178,16 @@ void PostOrder(treeNode<int> *root){
         PostOrder(root->children[i]);
     }
     cout<<root->data<<" ";
+
+}
+int maximumSubtreeWithNode(treeNode<int> *root){
+    int sum = 0;
+    for(int i=0;i<root->children.size();i++){
+        int csum = maximumSubtreeWithNode(root->children[i]);
+        sum = sum + csum;
+    }
+    sum+=root->data;
+    
 
 }
 int main()
