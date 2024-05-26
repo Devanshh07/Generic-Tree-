@@ -1,10 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-
 template<typename T>
-
-
 class BinaryTree{
     public:
     T data;
@@ -20,7 +16,6 @@ class BinaryTree{
         delete left;
     }
 };
-
 
 
 void print(BinaryTree<int>*root){
@@ -41,7 +36,7 @@ void print(BinaryTree<int>*root){
     
 }
 
-
+//in this code we simple take input from the user ;
 BinaryTree<int>* takeinputLevelWise(){
     int RootData;
     cout<<"Enter Root Data"<<endl;
@@ -75,7 +70,7 @@ BinaryTree<int>* takeinputLevelWise(){
 }
 
 
-
+//in this Code of input we need to remember where we are. means root's left or right?
 BinaryTree<int> * takeinput(){
     int rootdata;
     cout<<"Enter Root Data"<<endl;
@@ -101,7 +96,7 @@ bool nodewithValue(BinaryTree<int> *root,int X){
     if(root->data == X){
        return true;
     }
-    bool l = nodewithValue(root->left,X);
+     bool l = nodewithValue(root->left,X);
      bool r = nodewithValue(root->right,X); //save r result 
      return (l||r); //if Key is in tree left or right return true;
 }
@@ -111,10 +106,10 @@ int heightOfTree(BinaryTree<int> *root){
     if(root==NULL){
         return 0;
     }
-    int h = 1;
+    
     int r = heightOfTree(root->right);
     int l = heightOfTree(root->left);
-    h = max(r,l);
+    
     return h+1;
     
 }
@@ -260,7 +255,18 @@ pair<int,int> minMax(BinaryTree<int>*root){
     ans.second = maxx(root);
     return ans;
 };
+//sum of a binary tree
+int sum(BinaryTree<int> *root){
+    if(root==NULL){
+        return 0;
+    }
+    int summ = root->data;
+    int rSum = sum(root->right);
+    int lSum = sum(root->left);
 
+    summ = summ + rSum + lSum;
+    return summ;
+}
 
 //Number of Nodes
 int noOfNode(BinaryTree<int>*root){
@@ -309,6 +315,126 @@ return root;
 BinaryTree<int> *BuildTree(int *in,int *pre,int size){
     return treeHelper(in,pre,0,size-1,0,size-1);
 }
+//level Order Traversal [LeetCode 102 ]
+
+vector<vector<int>> levelorder(BinaryTree<int> *root){
+    vector<vector<int>> ans;
+    if(root==NULL) return ans;
+
+    queue< BinaryTree* >node;
+    node.push(root);
+
+    while(node.size()!=0){
+        
+        int size = node.size();
+        
+        vector<int> level;
+        for(int i=0;i<size;i++){
+            BinaryTree<int> *front = node.front();
+            node.pop();
+            if(front->left) node.push(front->left);
+            if(front->right) node.push(front->right);
+            level.push_back(front->data);
+        }
+        ans.push_back(level);
+    }
+    return ans;
+
+}
+//Avg of Level Traversal
+
+vector<double> avg(BinaryTree<int>*root){
+    vector<double>ans;
+    if(root==NULL) return ans;
+    queue<BinaryTree*>q;
+    q.push(root);
+    while(q.empty()){
+        int size = q.size();
+        int sum = 0;
+
+        for(int i=0;i<size;i++){
+            BinaryTree *front = q.front();
+            q.pop;
+            sum+=front->data;
+            if(front->left) q.push(front->left);
+            if(front->right) q.push(front->right);
+            
+        }
+        ans.push_back(sum/size);
+    }
+    return ans;
+}
+BinaryTree<int> *leafRemove(BinaryTree<int> *root){
+    if(root==NULL){
+        return NULL;
+    }
+    if(root->left==NULL &&root->right==NULL){
+        return NULL;
+    }
+   BinaryTree<int> *l = leafRemove(root->left);
+   BinaryTree<int> *r = leafRemove(root->right);
+   root->left = l;
+   root->right = r;
+   return root;
+}
+
+
+
+//Striver TREE Series ->
+
+//PreOrder Traversal  [Iterative : ]
+
+
+
+vector<int> preOrder(BinaryTree<int> *root){
+    vector<int> preOrd;
+    if(root==NULL){
+         return preOrd;
+    }
+    stack<BinaryTree *> st;
+    st.push = root;
+
+    while(!st.empty()){
+        root = st.top();
+        st.pop();
+        preOrd.push_back(root->data);
+        if(root->right){
+            st.push(root->right);
+        }
+        if(root->left){
+            st.push(root->left);
+        }
+    }
+    return preOrd;
+
+}
+
+
+//InOrder traversal [Iterative solution  :]
+
+vector<int> inOrder(BinaryTree <int> * root){
+    vector<int> in;
+    stack<BinaryTree *> st;
+    BinaryTree *node = root;
+
+    while(true){
+        if(node!=NULL){
+            st.push(node);
+            node = node->left;
+        }
+        else{
+            if(st.empty()==true) break;
+                 node = st.top();
+                 st.pop();
+                in.push_back(node->data);
+                node = node->right;
+        }
+    }
+    return in;
+
+}
+
+
 
 
  //just copy this thing & entire tree is created automatically,what we need to do?
@@ -340,8 +466,9 @@ cout<<"improved->";
   cout<<"diameter: "<<dia<<" "<<"height: "<<height<<endl;
   pair<int,int> anss = minMax(root);
   cout<<"Min: "<<anss.first<<" "<<"Max: "<<anss.second;
-
-
+cout<<endl<<"sum of all node in Binary tree: "<<sum(root)<<endl;
+cout<<"Removing leaf Node : ";
+print(leafRemove(root));
 
     return 0;
 }
