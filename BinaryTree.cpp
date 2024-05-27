@@ -379,7 +379,6 @@ BinaryTree<int> *leafRemove(BinaryTree<int> *root){
 }
 
 
-
 //Striver TREE Series ->
 
 //PreOrder Traversal  [Iterative : ]
@@ -433,6 +432,173 @@ vector<int> inOrder(BinaryTree <int> * root){
     return in;
 
 }
+
+//PostOrder TraverSal [left->Right->Root]
+
+vector<int> Post(BinaryTree<int> *root){
+     vector<int> pst;
+     if(root==NULL){
+        return pst;
+     }
+     stack<BinaryTree *> st1,st2;
+    
+    st1.push(root);
+
+    while(!st1.empty()){
+        root = st1.top();
+        st1.pop();
+        s2.push(root);
+        if(root->left){
+            st1.push(root->left);
+        }
+        if(root->right){
+            st1.push(root->right);
+        }
+    }
+
+    while(!st2.empty()){
+        pst.push_back(st2.top());
+        st2.pop();
+    }
+    return pst;
+
+}
+
+
+//Check If it is Balanced Binary Tree or Not?
+
+bool isBalanecd(BinaryTree<int> *root){
+    if(root==NULL){
+        return true;
+    }
+    int lH = isBalanecd(root->left);
+    int rH = isBalanecd(root->right);
+   
+   if(abs(lH-rH)>1) return false;
+
+   return (isBalanecd(root->left)&& isBalanecd(root->right));
+
+}
+  int solve(BinaryTree<int> *root,int &maxSum){
+             if(root==NULL){
+                return 0;
+             }
+
+             //left sum 
+             int l = solve(root->left);
+             int r = solve(root->right);
+             
+             //case 1 {root only max}
+             int  R = root->data;
+             //case 2 {best of left or right + root->val}
+             int LRR = max(l,r) +root->data;
+
+             //case 3 { curve path }
+             int curved = l+r+root->data;
+
+             maxSum = max(max(maxSum,R),max(LRR,curved));
+
+             return max(R,lRR);
+
+  }
+int maxPath(BinaryTree<int> *root){
+      int maxSum = INT_MIN;
+      solve(root,maxSum);
+      return maxSum;
+}
+
+
+
+
+
+
+//Zig-Zag Traversal  || Spiral Traversal 
+
+vector<vector<int>> zigzag(BinaryTree<int> *root){
+      vector<vector<int>>  result;
+      if(root==NULL){
+        return result;
+      }
+      queue<BinaryTree *> q;
+      q.push(root);
+      bool ltr = true;
+      while(!q.empty()){
+             vector<int> row;
+             int size = q.size();
+             for(int i =0;i<size;i++){
+                BinaryTree<int>  *node = q.front();
+                q.pop();
+                int ind = (ltr)? i:(size-1-i);
+                 row[ind] = node->data;
+                 if(node->data){
+                    q.push(node->left);
+                 }
+                 if(node->right) {
+                    q.push(node->right);
+                 }
+             }
+             ltr = !ltr;
+             result.push_back(row);
+      }
+      return result;
+
+}
+//Boundry TraverSal : 
+
+void lefttraversal(BinaryTree<int> *root,vector<int> &ans){
+    if(root==NULL || (root->left == NULL && root->right==NULL)){
+        return;
+    }
+     ans.push_back(root->data);
+    if(root->left){
+        lefttraversal(root->left,ans);
+    }
+    else {
+        lefttraversal(root->right,ans);
+    }
+}
+void leafTraversal(BinaryTree<int> *root,vector<int> &ans){
+    if(root==NULL){
+        return;
+    }
+    if(root->left ==NULL && root->right==NULL){
+        ans.push_back(root->data);
+        return;
+    }
+
+    leafTraversal(root->left,ans);
+    leafTraversal(root->right,ans);
+    
+}
+
+void righttraversal(BinaryTree<int> *root,vector<int> &ans){
+    if(root==NULL || (root->left==NULL && root->right == NULL)){
+        return;
+    }
+   if(root->right){
+    righttraversal(root->right,ans);
+   }else{
+     righttraversal(root->left,ans);
+   }
+    ans.push_back(root->data);
+}
+
+vector<int> boundryTraversal(BinaryTree<int> *root){
+    vector<int> ans;
+    if(root==NULL){
+        return ans;
+    }
+    lefttraversal(root,ans);
+    leafTraversal(root->left,ans);
+    leafTraversal(root->right,ans);
+    righttraversal(root,ans);
+    return ans;
+}
+
+
+
+
+
 
 
 
